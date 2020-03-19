@@ -9,7 +9,8 @@ namespace CustomScripts.Entities.EnemySystem
     {
         public static List<Enemy> Enemies { get; } = new List<Enemy>();
         public Vector3 Position { get => transform.position; }
-        private bool isWithinPlayerView;
+        private bool _isWithinPlayerView;
+        public bool IsWithinPlayerView { get => this._isWithinPlayerView; }
 
         private void Start()
         {
@@ -17,6 +18,12 @@ namespace CustomScripts.Entities.EnemySystem
         }
 
 
-        public void Mark(bool isWithinView) => this.isWithinPlayerView = isWithinView;
+        public void Mark(bool isWithinView) => this._isWithinPlayerView = isWithinView;
+
+
+        private void OnDestroy()
+        {
+            Enemies.Remove(this);
+        }
     }
 }
