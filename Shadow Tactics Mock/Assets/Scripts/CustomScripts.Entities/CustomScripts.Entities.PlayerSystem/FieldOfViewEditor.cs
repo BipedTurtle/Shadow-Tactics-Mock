@@ -17,6 +17,7 @@ namespace CustomScripts.Entities.PlayerSystem
             this.IndicateEnemiesWithinView(fov);
         }
 
+
         private void DrawPossibleFieldOfView(FieldOfView fov)
         {
             Handles.color = Color.red;
