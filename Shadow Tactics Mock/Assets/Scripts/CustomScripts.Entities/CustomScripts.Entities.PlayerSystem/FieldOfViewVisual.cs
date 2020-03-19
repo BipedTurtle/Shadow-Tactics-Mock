@@ -35,7 +35,7 @@ namespace CustomScripts.Entities.PlayerSystem
             var currentAngle = -anglePerStep * (this.viewSteps / 2);
 
             Vector3[] vertices = new Vector3[(this.viewSteps - 1) + 1];
-            vertices[0] = playerPos;
+            vertices[0] = fov.transform.InverseTransformPoint(playerPos);
 
             for (int i = 0; i < this.viewSteps - 1; i++) {
                 var dir = fov.GetVectorFromAngle(currentAngle, isGlobalAngle: false);
