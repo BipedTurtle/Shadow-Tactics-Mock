@@ -5,6 +5,7 @@ using CustomScripts.Managers;
 
 namespace CustomScripts.Entities.PlayerSystem
 {
+    [RequireComponent(typeof(FieldOfView))]
     public class PlayerController : MonoBehaviour
     {
         void Start()

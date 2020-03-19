@@ -4,15 +4,20 @@ using UnityEngine;
 
 public class FieldOfView : MonoBehaviour
 {
-    // Start is called before the first frame update
-    void Start()
-    {
-        
-    }
+    [SerializeField] private float _viewRadius;
+    public float ViewRadius { get => this._viewRadius; }
+    [SerializeField] private float _viewAngle;
+    public float ViewAngle { get => this._viewAngle; }
 
-    // Update is called once per frame
-    void Update()
+    public Vector3 GetVectorFromAngle(float angleInDeg, bool isGlobalAngle)
     {
-        
+        if (!isGlobalAngle)
+            angleInDeg += transform.rotation.eulerAngles.y;
+
+        var angleInRad = angleInDeg * Mathf.Deg2Rad;
+        var x = Mathf.Sin(angleInRad);
+        var z = Mathf.Cos(angleInRad);
+
+        return new Vector3(x, 0, z);
     }
 }
