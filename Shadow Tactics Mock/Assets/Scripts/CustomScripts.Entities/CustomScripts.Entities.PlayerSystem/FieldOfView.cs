@@ -6,6 +6,8 @@ using CustomScripts.Managers;
 
 namespace CustomScripts.Entities.PlayerSystem
 {
+    [RequireComponent(typeof(MeshFilter))]
+    [RequireComponent(typeof(MeshRenderer))]
     public class FieldOfView : MonoBehaviour
     {
         [SerializeField] private float _viewRadius;
@@ -14,23 +16,18 @@ namespace CustomScripts.Entities.PlayerSystem
         public float ViewAngle { get => this._viewAngle; }
 
         private FieldOfViewVisual visual;
+        public MeshFilter meshFilter { get; private set; }
         private void Start()
         {
             this.visual = new FieldOfViewVisual(this);
-            foreach (var vertex in visual.GetVertices())
-                Debug.Log(vertex);
+            this.meshFilter = GetComponent<MeshFilter>();
 
             UpdateManager.Instance.GlobalUpdate += this.CheckEnemies;
+            UpdateManager.Instance.GlobalLateUpdate += this.VisualizeFOV;
         }
 
 
-        private void OnDrawGizmos()
-        {
-            Gizmos.color = Color.yellow;
-            var vertices = this.visual.GetVertices();
-            foreach (var vertex in vertices)
-                Gizmos.DrawWireSphere(vertex, .15f);
-        }
+        private void VisualizeFOV() => this.visual.BuildMesh();
 
 
         public Vector3 GetVectorFromAngle(float angleInDeg, bool isGlobalAngle)
