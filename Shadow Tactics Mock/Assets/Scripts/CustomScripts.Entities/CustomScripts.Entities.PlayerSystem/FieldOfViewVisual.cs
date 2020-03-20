@@ -26,7 +26,7 @@ namespace CustomScripts.Entities.PlayerSystem
         }
 
 
-        private int viewSteps = 8;
+        private int viewSteps = 20;
         private Vector3[] GetVertices()
         {
             // num of vertices -1 plus the origin point, hence +1
