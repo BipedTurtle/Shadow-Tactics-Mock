@@ -26,7 +26,7 @@ namespace CustomScripts.Entities.PlayerSystem
         }
 
 
-        private int viewSteps = 30;
+        private int viewSteps = 8;
         private Vector3[] GetVertices()
         {
             // num of vertices -1 plus the origin point, hence +1
@@ -34,18 +34,30 @@ namespace CustomScripts.Entities.PlayerSystem
             var playerPos = fov.transform.position;
             var currentAngle = -anglePerStep * (this.viewSteps / 2);
 
-            Vector3[] vertices = new Vector3[(this.viewSteps - 1) + 1];
-            vertices[0] = playerPos;
-            
+            List<Vector3> vertices = new List<Vector3>();
+            vertices.Add(playerPos);
+
+            ViewCastInfo oldViewcast = new ViewCastInfo();
             for (int i = 0; i < this.viewSteps - 1; i++) {
-                var viewCast = this.ViewCast(currentAngle);
+                var currentViewCast = this.ViewCast(currentAngle);
+
+                if (i > 0) {
+                    if (oldViewcast.Hit != currentViewCast.Hit) {
+                        var edges = this.FindEdges(minCast: oldViewcast, maxCast: currentViewCast);
+                        if (edges.minEdge != Vector3.zero)
+                            vertices.Add(edges.minEdge);
+                        if (edges.maxEdge != Vector3.zero)
+                            vertices.Add(edges.maxEdge);
+                    }
+                }
 
                 var pointHit =
-                    viewCast.Hit ?
-                        viewCast.Point :
-                        playerPos + viewCast.ViewDir;
+                    currentViewCast.Hit ?
+                        currentViewCast.Point :
+                        playerPos + currentViewCast.ViewDir;
+                vertices.Add(pointHit);
 
-                vertices[i + 1] = pointHit;
+                oldViewcast = currentViewCast;
                 currentAngle += anglePerStep;
             }
 
@@ -70,6 +82,31 @@ namespace CustomScripts.Entities.PlayerSystem
             return triangles;
         }
 
+        private int edgeSolverIterations = 10;
+        private (Vector3 minEdge, Vector3 maxEdge) FindEdges(ViewCastInfo minCast, ViewCastInfo maxCast)
+        {
+            float minAngle = minCast.Angle;
+            float maxAngle = maxCast.Angle;
+            Vector3 minPoint = Vector3.zero;
+            Vector3 maxPoint = Vector3.zero;
+
+            for (int i = 0; i < edgeSolverIterations; i++) {
+                var bisectionAngle = (minAngle + maxAngle) / 2;
+                var bisectingCast = this.ViewCast(bisectionAngle);
+
+                if (minCast.Hit == bisectingCast.Hit) {
+                    minAngle = bisectingCast.Angle;
+                    minPoint = bisectingCast.Point;
+                }
+                else {
+                    maxAngle = bisectingCast.Angle;
+                    maxPoint = bisectingCast.Point;
+                }
+            }
+
+            return (minPoint, maxPoint);
+        }
+
         private ViewCastInfo ViewCast(float angle)
         {
             var dir = this.fov.GetDirectionFromAngle(angle, isGlobalAngle: false);
@@ -82,8 +119,9 @@ namespace CustomScripts.Entities.PlayerSystem
                     maxDistance: this.fov.ViewRadius,
                     hitInfo: out RaycastHit hit) ;
 
+            var point = castHit ? hit.point : playerPos + dir * this.fov.ViewRadius;
             var distance = hit.distance == 0 ? this.fov.ViewRadius : hit.distance;
-            return new ViewCastInfo(castHit, hit.point, dir, distance, angle);
+            return new ViewCastInfo(castHit, point, dir, distance, angle);
         }
     }
 
