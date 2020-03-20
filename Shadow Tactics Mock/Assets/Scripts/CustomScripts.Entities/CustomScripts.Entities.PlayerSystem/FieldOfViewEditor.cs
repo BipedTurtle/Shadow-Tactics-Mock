@@ -27,8 +27,8 @@ namespace CustomScripts.Entities.PlayerSystem
         private void DrawActualFieldOfView(FieldOfView fov)
         {
             var halfAngle = fov.ViewAngle / 2;
-            var viewLeftBound = fov.GetVectorFromAngle(-halfAngle, isGlobalAngle: false);
-            var viewRightBound = fov.GetVectorFromAngle(halfAngle, isGlobalAngle: false);
+            var viewLeftBound = fov.GetDirectionFromAngle(-halfAngle, isGlobalAngle: false);
+            var viewRightBound = fov.GetDirectionFromAngle(halfAngle, isGlobalAngle: false);
 
             Handles.color = Color.white;
             var playerPos = fov.transform.position;

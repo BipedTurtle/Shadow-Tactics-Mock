@@ -30,7 +30,7 @@ namespace CustomScripts.Entities.PlayerSystem
         private void VisualizeFOV() => this.visual.BuildMesh();
 
 
-        public Vector3 GetVectorFromAngle(float angleInDeg, bool isGlobalAngle)
+        public Vector3 GetDirectionFromAngle(float angleInDeg, bool isGlobalAngle)
         {
             if (!isGlobalAngle)
                 angleInDeg += transform.rotation.eulerAngles.y;

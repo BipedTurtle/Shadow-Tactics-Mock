@@ -35,27 +35,24 @@ namespace CustomScripts.Entities.PlayerSystem
             var currentAngle = -anglePerStep * (this.viewSteps / 2);
 
             Vector3[] vertices = new Vector3[(this.viewSteps - 1) + 1];
-            vertices[0] = fov.transform.InverseTransformPoint(playerPos);
-
+            vertices[0] = playerPos;
+            
             for (int i = 0; i < this.viewSteps - 1; i++) {
-                var dir = fov.GetVectorFromAngle(currentAngle, isGlobalAngle: false);
-                var didHitSomething = Physics.Raycast(
-                        origin: playerPos,
-                        direction: dir,
-                        maxDistance: fov.ViewRadius,
-                        hitInfo: out RaycastHit hit
-                        );
+                var viewCast = this.ViewCast(currentAngle);
 
                 var pointHit =
-                    didHitSomething ?
-                        hit.point :
-                        playerPos + dir * fov.ViewRadius;
+                    viewCast.Hit ?
+                        viewCast.Point :
+                        playerPos + viewCast.ViewDir;
 
-                vertices[i + 1] = fov.transform.InverseTransformPoint(pointHit);
+                vertices[i + 1] = pointHit;
                 currentAngle += anglePerStep;
             }
 
-            return vertices;
+            return
+                vertices.
+                    Select(v => this.fov.transform.InverseTransformPoint(v)).
+                    ToArray();
         }
 
         private int[] GetTriangles(Vector3[] vertices)
@@ -71,6 +68,42 @@ namespace CustomScripts.Entities.PlayerSystem
             }
 
             return triangles;
+        }
+
+        private ViewCastInfo ViewCast(float angle)
+        {
+            var dir = this.fov.GetDirectionFromAngle(angle, isGlobalAngle: false);
+            var playerPos = this.fov.transform.position;
+
+            var castHit =
+                Physics.Raycast(
+                    origin: playerPos,
+                    direction: dir,
+                    maxDistance: this.fov.ViewRadius,
+                    hitInfo: out RaycastHit hit) ;
+
+            var distance = hit.distance == 0 ? this.fov.ViewRadius : hit.distance;
+            return new ViewCastInfo(castHit, hit.point, dir, distance, angle);
+        }
+    }
+
+    struct ViewCastInfo
+    {
+        public bool Hit { get; }
+        public Vector3 Point { get; }
+        public Vector3 Direction { get; }
+        public float Distance { get; }
+        public Vector3 ViewDir { get => Direction * Distance; }
+        public float Angle { get; }
+
+
+        public ViewCastInfo(bool hit, Vector3 point, Vector3 direction,float distance, float angle)
+        {
+            this.Hit = hit;
+            this.Point = point;
+            this.Direction = direction;
+            this.Distance = distance;
+            this.Angle = angle;
         }
     }
 }
