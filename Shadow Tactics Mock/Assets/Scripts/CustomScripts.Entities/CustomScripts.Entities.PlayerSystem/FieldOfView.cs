@@ -22,6 +22,10 @@ namespace CustomScripts.Entities.PlayerSystem
             this.visual = new FieldOfViewVisual(this);
             this.meshFilter = GetComponent<MeshFilter>();
 
+            var meshRenderer = GetComponent<MeshRenderer>();
+            meshRenderer.receiveShadows = false;
+            meshRenderer.shadowCastingMode = UnityEngine.Rendering.ShadowCastingMode.Off;
+
             UpdateManager.Instance.GlobalUpdate += this.CheckEnemies;
             UpdateManager.Instance.GlobalLateUpdate += this.VisualizeFOV;
         }
