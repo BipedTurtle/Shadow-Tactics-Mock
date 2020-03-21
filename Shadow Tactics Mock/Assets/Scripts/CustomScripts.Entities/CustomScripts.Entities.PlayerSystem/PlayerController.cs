@@ -1,17 +1,21 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.AI;
 using CustomScripts.Managers;
 
 namespace CustomScripts.Entities.PlayerSystem
 {
+    [RequireComponent(typeof(NavMeshAgent))]
     public class PlayerController : MonoBehaviour
     {
         void Start()
         {
             this.mainCamera = Camera.main;
+            this.agent = GetComponent<NavMeshAgent>();
 
             UpdateManager.Instance.GlobalUpdate += this.LookAtMousePointer;
+            UpdateManager.Instance.GlobalUpdate += this.MoveToClickPoint;
         }
 
         private Camera mainCamera;
@@ -21,6 +25,24 @@ namespace CustomScripts.Entities.PlayerSystem
             mousePos = this.mainCamera.ScreenToWorldPoint(mousePos);
             var lookAtPos = mousePos + Vector3.up * transform.position.y;
             transform.LookAt(lookAtPos);
+        }
+
+        private NavMeshAgent agent;
+        private void MoveToClickPoint()
+        {
+            Ray fromCameraRay = this.mainCamera.ScreenPointToRay(Input.mousePosition);
+            bool groundHit =
+                Physics.Raycast(
+                    ray: fromCameraRay,
+                    maxDistance: 30f,
+                    hitInfo: out RaycastHit hit
+                    );
+            bool mouseClicked = Input.GetMouseButtonDown(1);
+
+            if (groundHit && mouseClicked) {
+                var destination = hit.point;
+                this.agent.SetDestination(destination);
+            }
         }
     }
 }
