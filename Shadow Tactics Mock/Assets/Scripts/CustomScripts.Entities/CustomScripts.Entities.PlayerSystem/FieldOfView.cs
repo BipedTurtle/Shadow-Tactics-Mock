@@ -46,7 +46,7 @@ namespace CustomScripts.Entities.PlayerSystem
             return new Vector3(x, 0, z);
         }
 
-
+        [System.Obsolete("this method will be replaced by CheckWithinView")]
         private void CheckEnemies()
         {
             foreach (var enemy in Enemy.Enemies) {
@@ -64,6 +64,20 @@ namespace CustomScripts.Entities.PlayerSystem
                 var isWithinView = angleBetween <= halfAngle;
                 enemy.Mark(isWithinView);
             }
+        }
+
+        public bool CheckWithinView(Transform target)
+        {
+            Vector3 thisToTarget = target.position - transform.position;
+            var sqrDistance = thisToTarget.sqrMagnitude;
+            var isOutsideViewRadius = sqrDistance > Mathf.Pow(this.ViewRadius, 2);
+            if (isOutsideViewRadius)
+                return false;
+
+            var angleBetween = Vector3.Angle(thisToTarget, transform.forward);
+            var halfAngle = this.ViewAngle / 2;
+            var isWithinRange = angleBetween < halfAngle;
+            return isWithinRange;
         }
     }
 }

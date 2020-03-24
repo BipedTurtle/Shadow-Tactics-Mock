@@ -16,6 +16,7 @@ namespace CustomScripts.Entities.EnemySystem
             transform.position = this.rallyPoints[0];
 
             UpdateManager.Instance.GlobalUpdate += this.Patrol;
+            UpdateManager.Instance.GlobalUpdate += base.AttackPlayerInView;
         }
 
         [SerializeField] private Transform[] rallies;
@@ -36,7 +37,7 @@ namespace CustomScripts.Entities.EnemySystem
 
             this.WalkToRallyPoint(destination);
 
-
+            
         }
 
         private int GetNextRally()
