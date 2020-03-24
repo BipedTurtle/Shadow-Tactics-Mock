@@ -17,6 +17,7 @@ namespace CustomScripts.Entities.EnemySystem
 
             UpdateManager.Instance.GlobalUpdate += this.Patrol;
             UpdateManager.Instance.GlobalUpdate += base.AttackPlayerInView;
+            UpdateManager.Instance.GlobalUpdate += base.StopAttackingIfOutSideView;
         }
 
         [SerializeField] private Transform[] rallies;

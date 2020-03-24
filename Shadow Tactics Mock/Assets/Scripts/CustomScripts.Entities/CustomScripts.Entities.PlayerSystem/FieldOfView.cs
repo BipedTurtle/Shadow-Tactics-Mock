@@ -66,7 +66,7 @@ namespace CustomScripts.Entities.PlayerSystem
             }
         }
 
-        public bool CheckWithinView(Transform target)
+        public bool IsWithinView(Transform target)
         {
             Vector3 thisToTarget = target.position - transform.position;
             var sqrDistance = thisToTarget.sqrMagnitude;
@@ -76,8 +76,8 @@ namespace CustomScripts.Entities.PlayerSystem
 
             var angleBetween = Vector3.Angle(thisToTarget, transform.forward);
             var halfAngle = this.ViewAngle / 2;
-            var isWithinRange = angleBetween < halfAngle;
-            return isWithinRange;
+            var isWithinView = angleBetween < halfAngle;
+            return isWithinView;
         }
     }
 }

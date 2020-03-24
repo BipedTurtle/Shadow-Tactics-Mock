@@ -11,6 +11,7 @@ namespace CustomScripts.Entities.PlayerSystem
     public class Player : MonoBehaviour
     {
         public static List<Player> players { get; } = new List<Player>();
+        public Vector3 Position => transform.position;
 
         private void Start()
         {

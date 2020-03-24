@@ -40,14 +40,13 @@ namespace CustomScripts.Entities.EnemySystem
             Enemies.Remove(this);
         }
 
-        private bool PlayerWithinView(Player player) => this.fov.CheckWithinView(player.transform);
+        private bool PlayerWithinView(Player player) => this.fov.IsWithinView(player.transform);
 
         private Player target;
         protected void AttackPlayerInView()
         {
-            if (this.target == null)
-                foreach (var player in Player.players)
-                    this.target = this.fov.CheckWithinView(player.transform) ? player : null;
+            foreach (var player in Player.players)
+                this.target = this.fov.IsWithinView(player.transform) ? player : this.target;
 
             if (target != null)
                 Attack(this.target.transform);
@@ -57,6 +56,18 @@ namespace CustomScripts.Entities.EnemySystem
             {
                 this.agent.SetDestination(targetTransform.position);
             }
+        }
+
+        protected void StopAttackingIfOutSideView()
+        {
+            if (this.target == null)
+                return;
+
+            var isOutSideOfViewRadius = (this.target.Position - transform.position).sqrMagnitude > Mathf.Pow(this.fov.ViewRadius, 2);
+            var isOutSideOfViewAngle = !this.fov.IsWithinView(this.target.transform);
+
+            if (isOutSideOfViewRadius && isOutSideOfViewAngle)
+                this.target = null;
         }
 
         protected abstract void Patrol();
