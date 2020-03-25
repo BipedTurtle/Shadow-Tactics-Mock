@@ -141,7 +141,7 @@ GameObject:
   - component: {fileID: 2124145575654564767}
   - component: {fileID: 4555450773311152207}
   - component: {fileID: 6922179852931089696}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: Rank-and-file Enemy - prototype
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -263,6 +263,7 @@ MonoBehaviour:
   - {fileID: 5972811173348382883}
   - {fileID: 5284939925961374838}
   - {fileID: 6562405486658098056}
+  patrolPattern: 0
 --- !u!1001 &1140017359735437648
 PrefabInstance:
   m_ObjectHideFlags: 0
