@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using UnityEngine;
+using CustomScripts.Entities.EnemySystem;
 
 namespace CustomScripts.Managers
 {
@@ -27,7 +28,7 @@ namespace CustomScripts.Managers
             this.mainCamera = Camera.main;
 
             //DO NOT CHANGE THE ORDER
-            UpdateManager.Instance.GlobalUpdate += this.Attack;
+            UpdateManager.Instance.GlobalUpdate += this.SignalAttack;
             UpdateManager.Instance.GlobalUpdate += this.ToggleAttack;
         }
 
@@ -40,7 +41,7 @@ namespace CustomScripts.Managers
                 this.isAttackReady = false;
         }
 
-        private void Attack()
+        private void SignalAttack()
         {
             if (!isAttackReady)
                 return;
@@ -59,14 +60,16 @@ namespace CustomScripts.Managers
                     hitInfo: out RaycastHit hit,
                     layerMask: mask);
 
-            if (isHit)
-                this.OnAttackImplemented();
+            if (isHit) {
+                var enemyHit = hit.transform.GetComponent<Enemy>();
+                this.OnAttackImplemented(enemyHit);
+            }
         }
 
-        public event Action ImplementAttack;
-        private void OnAttackImplemented()
+        public event Action<Enemy> ImplementAttack;
+        private void OnAttackImplemented(Enemy enemy)
         {
-            this.ImplementAttack?.Invoke();
+            this.ImplementAttack?.Invoke(enemy);
         }
     }
 }

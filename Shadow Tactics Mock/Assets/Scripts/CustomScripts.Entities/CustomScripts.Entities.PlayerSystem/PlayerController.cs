@@ -12,8 +12,20 @@ namespace CustomScripts.Entities.PlayerSystem
         void Start()
         {
             this.mainCamera = Camera.main;
-            this.agent = GetComponent<NavMeshAgent>();
+            this.Agent = GetComponent<NavMeshAgent>();
 
+            UpdateManager.Instance.GlobalUpdate += this.LookAtMousePointer;
+            UpdateManager.Instance.GlobalUpdate += this.MoveToClickPoint;
+        }
+
+        public void Lock()
+        {
+            UpdateManager.Instance.GlobalUpdate -= this.LookAtMousePointer;
+            UpdateManager.Instance.GlobalUpdate -= this.MoveToClickPoint;
+        }
+
+        public void UnLock()
+        {
             UpdateManager.Instance.GlobalUpdate += this.LookAtMousePointer;
             UpdateManager.Instance.GlobalUpdate += this.MoveToClickPoint;
         }
@@ -26,8 +38,8 @@ namespace CustomScripts.Entities.PlayerSystem
             var lookAtPos = mousePos + Vector3.up * transform.position.y;
             transform.LookAt(lookAtPos);
         }
-
-        private NavMeshAgent agent;
+        
+        public NavMeshAgent Agent { get; private set; }
         private void MoveToClickPoint()
         {
             Ray fromCameraRay = this.mainCamera.ScreenPointToRay(Input.mousePosition);
@@ -41,7 +53,7 @@ namespace CustomScripts.Entities.PlayerSystem
 
             if (groundHit && mouseClicked) {
                 var destination = hit.point;
-                this.agent.SetDestination(destination);
+                this.Agent.SetDestination(destination);
             }
         }
     }

@@ -5,6 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using UnityEngine;
 using CustomScripts.Managers;
+using CustomScripts.Entities.EnemySystem;
 
 namespace CustomScripts.Entities.PlayerSystem
 {
@@ -14,19 +15,29 @@ namespace CustomScripts.Entities.PlayerSystem
     {
         public static List<Player> players { get; } = new List<Player>();
         public Vector3 Position => transform.position;
-        private Animator animator;
+        public Animator Animator { get; private set; }
+        public PlayerController Controller { get; private set; }
 
         private void Start()
         {
             players.Add(this);
-            this.animator = GetComponent<Animator>();
+            this.Animator = GetComponent<Animator>();
+            this.Controller = GetComponent<PlayerController>();
 
-            GameManager.Instance.ImplementAttack += this.BasicAttack;
+            UpdateManager.Instance.GlobalUpdate += this.ChooseSkill;
+            GameManager.Instance.ImplementAttack += this.ImplementSkill;
         }
 
-        private void BasicAttack()
+        private IPlayerSkill skill = NoSkill.Instance;
+        private void ChooseSkill()
         {
-            this.animator.SetTrigger("Basic Attack");
+            if (Input.GetKeyDown(KeyCode.A))
+                this.skill = new BasicAttack(this);
+        }
+
+        private void ImplementSkill(Enemy target)
+        {
+            this.skill.Implement(target);
         }
     }
 }
