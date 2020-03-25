@@ -18,6 +18,7 @@ namespace CustomScripts.Entities.PlayerSystem
             Instance = new NoSkill();
         }
 
+        public int Damage => 0;
         public IPlayerSkill Implement(Enemy target) => this;
 
     }

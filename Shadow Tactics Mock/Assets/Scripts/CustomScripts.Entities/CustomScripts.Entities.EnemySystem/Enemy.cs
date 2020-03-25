@@ -14,8 +14,6 @@ namespace CustomScripts.Entities.EnemySystem
         public static List<Enemy> Enemies { get; } = new List<Enemy>();
 
         public Vector3 Position { get => transform.position; }
-        private bool _isWithinPlayerView;
-        public bool IsWithinPlayerView { get => this._isWithinPlayerView; }
 
         protected NavMeshAgent agent;
         protected FieldOfView fov;
@@ -31,16 +29,11 @@ namespace CustomScripts.Entities.EnemySystem
             UpdateManager.Instance.GlobalUpdate += this.AttackPlayerInView;
         }
 
-
-        public void Mark(bool isWithinView) => this._isWithinPlayerView = isWithinView;
-
-
         private void OnDestroy()
         {
             Enemies.Remove(this);
         }
 
-        private bool PlayerWithinView(Player player) => this.fov.IsWithinView(player.transform);
 
         private Player target;
         protected void AttackPlayerInView()

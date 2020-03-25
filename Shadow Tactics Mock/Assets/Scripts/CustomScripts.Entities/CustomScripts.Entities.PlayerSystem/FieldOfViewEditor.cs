@@ -14,7 +14,6 @@ namespace CustomScripts.Entities.PlayerSystem
 
             this.DrawPossibleFieldOfView(fov);
             this.DrawActualFieldOfView(fov);
-            this.IndicateEnemiesWithinView(fov);
         }
 
 
@@ -34,19 +33,6 @@ namespace CustomScripts.Entities.PlayerSystem
             var playerPos = fov.transform.position;
             Handles.DrawLine(playerPos, playerPos + viewLeftBound * fov.ViewRadius);
             Handles.DrawLine(playerPos, playerPos + viewRightBound * fov.ViewRadius);
-        }
-
-        private void IndicateEnemiesWithinView(FieldOfView fov)
-        {
-            var player = fov.transform;
-
-            foreach (var enemy in Enemy.Enemies) {
-                if (!enemy.IsWithinPlayerView)
-                    continue;
-
-                Handles.color = Color.blue;
-                Handles.DrawLine(enemy.Position, player.position);
-            }
         }
     }
 }

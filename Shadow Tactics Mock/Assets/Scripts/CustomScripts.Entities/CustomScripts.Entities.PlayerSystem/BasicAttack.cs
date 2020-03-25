@@ -14,6 +14,7 @@ namespace CustomScripts.Entities.PlayerSystem
     {
         private Player player;
         private NavMeshAgent agent;
+        public int Damage { get; } = 100; 
 
         public BasicAttack(Player player)
         {

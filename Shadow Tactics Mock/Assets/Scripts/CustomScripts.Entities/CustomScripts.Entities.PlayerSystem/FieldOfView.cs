@@ -26,7 +26,6 @@ namespace CustomScripts.Entities.PlayerSystem
             meshRenderer.receiveShadows = false;
             meshRenderer.shadowCastingMode = UnityEngine.Rendering.ShadowCastingMode.Off;
 
-            UpdateManager.Instance.GlobalUpdate += this.CheckEnemies;
             UpdateManager.Instance.GlobalLateUpdate += this.VisualizeFOV;
         }
 
@@ -44,26 +43,6 @@ namespace CustomScripts.Entities.PlayerSystem
             var z = Mathf.Cos(angleInRad);
 
             return new Vector3(x, 0, z);
-        }
-
-        [System.Obsolete("this method will be replaced by CheckWithinView")]
-        private void CheckEnemies()
-        {
-            foreach (var enemy in Enemy.Enemies) {
-                Vector3 playerToEnemy = enemy.Position - transform.position;
-
-                var squaredDistance = playerToEnemy.sqrMagnitude;
-                var isWithinPossibleView = squaredDistance <= Mathf.Pow(this.ViewRadius, 2);
-                if (!isWithinPossibleView) {
-                    enemy.Mark(isWithinView: false);
-                    continue;
-                }
-
-                var halfAngle = this.ViewAngle / 2;
-                var angleBetween = Vector3.Angle(transform.forward, playerToEnemy);
-                var isWithinView = angleBetween <= halfAngle;
-                enemy.Mark(isWithinView);
-            }
         }
 
         public bool IsWithinView(Transform target)
