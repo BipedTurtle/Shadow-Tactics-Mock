@@ -60,7 +60,13 @@ namespace CustomScripts.Managers
                     layerMask: mask);
 
             if (isHit)
-                Debug.Log(hit.transform.name);
+                this.OnAttackImplemented();
+        }
+
+        public event Action ImplementAttack;
+        private void OnAttackImplemented()
+        {
+            this.ImplementAttack?.Invoke();
         }
     }
 }
