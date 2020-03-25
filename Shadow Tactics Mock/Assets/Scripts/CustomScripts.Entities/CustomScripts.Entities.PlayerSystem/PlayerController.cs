@@ -18,16 +18,29 @@ namespace CustomScripts.Entities.PlayerSystem
             UpdateManager.Instance.GlobalUpdate += this.MoveToClickPoint;
         }
 
-        public void Lock()
+        public void Lock(float lockAfter = 0)
         {
-            UpdateManager.Instance.GlobalUpdate -= this.LookAtMousePointer;
-            UpdateManager.Instance.GlobalUpdate -= this.MoveToClickPoint;
+            StartCoroutine(Implementation());       
+
+            IEnumerator Implementation()
+            {
+                yield return new WaitForSeconds(lockAfter);
+
+                UpdateManager.Instance.GlobalUpdate -= this.LookAtMousePointer;
+                UpdateManager.Instance.GlobalUpdate -= this.MoveToClickPoint;
+            }
         }
 
-        public void UnLock()
+        public void UnLock(float unlockAfter = 0)
         {
-            UpdateManager.Instance.GlobalUpdate += this.LookAtMousePointer;
-            UpdateManager.Instance.GlobalUpdate += this.MoveToClickPoint;
+            StartCoroutine(Implementation());
+
+            IEnumerator Implementation()
+            {
+                yield return new WaitForSeconds(unlockAfter);
+                UpdateManager.Instance.GlobalUpdate += this.LookAtMousePointer;
+                UpdateManager.Instance.GlobalUpdate += this.MoveToClickPoint;
+            }
         }
 
         private Camera mainCamera;

@@ -59,7 +59,7 @@ namespace CustomScripts.Entities.PlayerSystem
                 this.player.Animator.SetTrigger("Basic Attack");
 
                 player.StopAllCoroutines();
-                this.player.Controller.UnLock();
+                this.player.Controller.UnLock(unlockAfter:1f);
                 this.agent.isStopped = false;
             }
         }
