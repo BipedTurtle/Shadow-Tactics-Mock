@@ -22,7 +22,7 @@ namespace CustomScripts.Entities.PlayerSystem
             this.agent = player.Controller.Agent;
         }
 
-        private float attackRange = 2f;
+        private float attackRange = 1.2f;
         public IPlayerSkill Implement(Enemy target)
         {
             this.player.Controller.Lock();
@@ -58,6 +58,7 @@ namespace CustomScripts.Entities.PlayerSystem
                 this.agent.isStopped = true;
                 this.player.transform.LookAt(target.transform.position);
                 this.player.Animator.SetTrigger("Basic Attack");
+                target.TakeDamage(skill: this);
 
                 player.StopAllCoroutines();
                 this.player.Controller.UnLock(unlockAfter:1f);

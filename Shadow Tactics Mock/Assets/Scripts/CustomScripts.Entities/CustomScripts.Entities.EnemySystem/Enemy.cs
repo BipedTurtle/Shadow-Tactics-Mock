@@ -15,6 +15,15 @@ namespace CustomScripts.Entities.EnemySystem
 
         public Vector3 Position { get => transform.position; }
 
+        [SerializeField] private int health = 100;
+        public virtual void TakeDamage(IPlayerSkill skill)
+        {
+            this.health -= skill.Damage;
+
+            if (this.health <= 0)
+                Debug.Log($"{name} is dead");
+        }
+
         protected NavMeshAgent agent;
         protected FieldOfView fov;
         protected virtual void Start()

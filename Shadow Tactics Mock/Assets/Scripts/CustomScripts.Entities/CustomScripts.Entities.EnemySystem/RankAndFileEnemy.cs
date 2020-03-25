@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
 using CustomScripts.Managers;
+using CustomScripts.Entities.PlayerSystem;
 
 namespace CustomScripts.Entities.EnemySystem
 {
@@ -18,6 +19,19 @@ namespace CustomScripts.Entities.EnemySystem
             UpdateManager.Instance.GlobalUpdate += this.Patrol;
             UpdateManager.Instance.GlobalUpdate += base.AttackPlayerInView;
             UpdateManager.Instance.GlobalUpdate += base.StopAttackingIfOutSideView;
+        }
+
+        public override void TakeDamage(IPlayerSkill skill)
+        {
+            Freeze();
+            base.TakeDamage(skill);
+
+            void Freeze() {
+                this.agent.isStopped = true;
+                UpdateManager.Instance.GlobalUpdate -= this.Patrol;
+                UpdateManager.Instance.GlobalUpdate -= base.AttackPlayerInView;
+                UpdateManager.Instance.GlobalUpdate -= base.StopAttackingIfOutSideView;
+            }
         }
 
         [SerializeField] private Transform[] rallies;
