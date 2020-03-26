@@ -5,7 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using UnityEngine;
 
-namespace Assets.Scripts.Utility
+namespace CustomScripts.Utility
 {
     public class MainCamera : MonoBehaviour
     {
@@ -13,7 +13,8 @@ namespace Assets.Scripts.Utility
 
         private void Awake()
         {
-            if (Instance != null) {
+            if (Instance != null)
+            {
                 Destroy(gameObject);
                 return;
             }
@@ -28,5 +29,7 @@ namespace Assets.Scripts.Utility
         }
 
         public Vector3 FromScreenToWorld(Vector3 pos) => this.main.ScreenToWorldPoint(pos);
+
+        public Ray FromScreenPointToRay(Vector3 pos) => this.main.ScreenPointToRay(pos);
     }
 }

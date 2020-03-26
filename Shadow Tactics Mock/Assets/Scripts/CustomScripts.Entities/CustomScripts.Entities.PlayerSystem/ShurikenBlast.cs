@@ -10,9 +10,12 @@ namespace CustomScripts.Entities.PlayerSystem
         public int Damage => 100;
 
         private Ninja ninja;
+        private Shuriken shuriken;
         public ShurikenBlast(Player player)
         {
             this.ninja = (player as Ninja) ?? throw new ArgumentException("Only a Ninja can use this skill. It's not for other types, such as Yuki or Samurai");
+            this.shuriken = this.ninja.Inventory.Get<Shuriken>();
+
             this.ninja.Shuriken.ShurikenLanded += this.OnShurikenLanded_DealDamage;
         }
 
@@ -20,8 +23,13 @@ namespace CustomScripts.Entities.PlayerSystem
         private float range = 4f;
         public IPlayerSkill Implement(Enemy target)
         {
-            this.target = target;
-            this.ninja.StartCoroutine(Logic());
+            var hasShuriken = this.shuriken != null;
+            Debug.Log(hasShuriken);
+            if (hasShuriken) {
+                this.target = target;
+                this.ninja.StartCoroutine(Logic());
+            }
+
             return new NoSkill(this.ninja);
 
 
@@ -31,8 +39,9 @@ namespace CustomScripts.Entities.PlayerSystem
 
                 var isWithinRange = Chase();
                 if (isWithinRange) {
-                    var startPos = this.ninja.Shuriken.transform.position;
-                    var targetPos = target.transform.position;
+                    this.shuriken.gameObject.SetActive(true);
+                    var startPos = this.ninja.transform.position;
+                    var targetPos = this.target.transform.position;
                     this.ninja.StartCoroutine(ThrowShuriken(startPos, targetPos));
                     this.ninja.Controller.Agent.ResetPath();
                 }
@@ -55,11 +64,9 @@ namespace CustomScripts.Entities.PlayerSystem
             
             IEnumerator ThrowShuriken(Vector3 startPos, Vector3 targetPos, float progress=0)
             {
-                Transform shuriken = this.ninja.Shuriken.transform;
-
                 var speed = 3f;
                 float t = progress + speed * Time.fixedDeltaTime;
-                shuriken.position = Vector3.Lerp(startPos, targetPos, t);
+                this.shuriken.transform.position = Vector3.Lerp(startPos, targetPos, t);
 
                 yield return null;
                 if (t < 1)

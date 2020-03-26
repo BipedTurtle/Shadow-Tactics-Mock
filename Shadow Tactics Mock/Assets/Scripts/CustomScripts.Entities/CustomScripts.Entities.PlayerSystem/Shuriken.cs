@@ -8,8 +8,14 @@ using CustomScripts.Entities.EnemySystem;
 
 namespace CustomScripts.Entities.PlayerSystem
 {
-    public class Shuriken : MonoBehaviour
+    public class Shuriken : MonoBehaviour, IStorable
     {
+        private void Start()
+        {
+            this.belongsTo = GetComponentInParent<Ninja>();
+        }
+
+
         public event Action ShurikenLanded;
         private void OnTriggerEnter(Collider other)
         {
@@ -18,7 +24,16 @@ namespace CustomScripts.Entities.PlayerSystem
                 return;
 
             transform.SetParent(enemyHit.transform);
+            enemyHit.Inventory.Add(this);
+            gameObject.SetActive(false);
             this.ShurikenLanded?.Invoke();
+        }
+
+
+        private Ninja belongsTo;
+        public void OnStored()
+        {
+            this.gameObject.SetActive(true);
         }
     }
 }

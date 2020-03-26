@@ -14,6 +14,8 @@ namespace CustomScripts.Entities.EnemySystem
         public static List<Enemy> Enemies { get; } = new List<Enemy>();
 
         public Vector3 Position { get => transform.position; }
+        public Inventory Inventory { get; } = new Inventory();
+
 
         [SerializeField] private int health = 100;
         public virtual void TakeDamage(IPlayerSkill skill)
@@ -24,11 +26,13 @@ namespace CustomScripts.Entities.EnemySystem
                 Die();
         }
 
+
         public void Die()
         {
             Enemies.Remove(this);
             this.fov.DeVisualizeFOV();
         }
+
 
         protected NavMeshAgent agent;
         protected FieldOfView fov;
@@ -79,6 +83,5 @@ namespace CustomScripts.Entities.EnemySystem
         }
 
         protected abstract void Patrol();
-
     }
 }
