@@ -32,7 +32,8 @@ namespace CustomScripts.Managers
         private bool toggleOn;
         private void ToggleAttackMarker()
         {
-            if (Input.GetKeyDown(KeyCode.A))
+            if (Input.GetKeyDown(KeyCode.A) ||
+                Input.GetKeyDown(KeyCode.Q))
                 this.toggleOn = true;
             if (Input.GetMouseButtonDown(0))
                 this.toggleOn = false;

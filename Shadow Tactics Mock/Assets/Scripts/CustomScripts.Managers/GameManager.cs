@@ -35,7 +35,8 @@ namespace CustomScripts.Managers
         private bool isAttackReady;
         private void ToggleAttack()
         {
-            if (Input.GetKeyDown(KeyCode.A))
+            if (Input.GetKeyDown(KeyCode.A) ||
+                Input.GetKeyDown(KeyCode.Q))
                 this.isAttackReady = true;
             else if (Input.GetMouseButtonDown(0))
                 this.isAttackReady = false;
@@ -62,6 +63,7 @@ namespace CustomScripts.Managers
 
             if (isHit) {
                 var enemyHit = hit.transform.GetComponent<Enemy>();
+                Debug.Log(enemyHit);
                 this.OnAttackImplemented(enemyHit);
             }
         }

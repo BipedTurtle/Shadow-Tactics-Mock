@@ -17,6 +17,8 @@ namespace CustomScripts.Entities.PlayerSystem
         public Vector3 Position => transform.position;
         public Animator Animator { get; private set; }
         public PlayerController Controller { get; private set; }
+        [SerializeField] private Shuriken _shuriken;
+        public Shuriken Shuriken { get => this._shuriken; }
 
         private void Start()
         {
@@ -33,6 +35,8 @@ namespace CustomScripts.Entities.PlayerSystem
         {
             if (Input.GetKeyDown(KeyCode.A))
                 this.skill = new BasicAttack(this);
+            else if (Input.GetKeyDown(KeyCode.Q))
+                this.skill = new ShurikenBlast(this);
         }
 
         private void ImplementSkill(Enemy target)
