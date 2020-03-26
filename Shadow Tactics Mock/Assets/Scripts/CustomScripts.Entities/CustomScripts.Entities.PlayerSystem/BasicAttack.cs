@@ -28,7 +28,7 @@ namespace CustomScripts.Entities.PlayerSystem
             this.player.Controller.Lock();
             this.player.StartCoroutine(Logic());
 
-            return NoSkill.Instance;
+            return new NoSkill(this.player);
 
 
             IEnumerator Logic()

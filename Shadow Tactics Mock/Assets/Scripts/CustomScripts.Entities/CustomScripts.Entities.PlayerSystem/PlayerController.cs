@@ -14,7 +14,8 @@ namespace CustomScripts.Entities.PlayerSystem
             this.mainCamera = Camera.main;
             this.Agent = GetComponent<NavMeshAgent>();
 
-            UpdateManager.Instance.GlobalUpdate += this.LookAtMousePointer;
+            //we might not need lookat in this game
+            //UpdateManager.Instance.GlobalUpdate += this.LookAtMousePointer;
             UpdateManager.Instance.GlobalUpdate += this.MoveToClickPoint;
         }
 
@@ -38,7 +39,7 @@ namespace CustomScripts.Entities.PlayerSystem
             IEnumerator Implementation()
             {
                 yield return new WaitForSeconds(unlockAfter);
-                UpdateManager.Instance.GlobalUpdate += this.LookAtMousePointer;
+                //UpdateManager.Instance.GlobalUpdate += this.LookAtMousePointer;
                 UpdateManager.Instance.GlobalUpdate += this.MoveToClickPoint;
             }
         }
@@ -55,6 +56,10 @@ namespace CustomScripts.Entities.PlayerSystem
         public NavMeshAgent Agent { get; private set; }
         private void MoveToClickPoint()
         {
+            bool mouseClicked = Input.GetMouseButtonDown(1);
+            if (!mouseClicked)
+                return;
+
             Ray fromCameraRay = this.mainCamera.ScreenPointToRay(Input.mousePosition);
             bool groundHit =
                 Physics.Raycast(
@@ -62,9 +67,8 @@ namespace CustomScripts.Entities.PlayerSystem
                     maxDistance: 30f,
                     hitInfo: out RaycastHit hit
                     );
-            bool mouseClicked = Input.GetMouseButtonDown(1);
 
-            if (groundHit && mouseClicked) {
+            if (groundHit) {
                 var destination = hit.point;
                 this.Agent.SetDestination(destination);
             }

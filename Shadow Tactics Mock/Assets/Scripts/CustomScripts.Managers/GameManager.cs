@@ -63,7 +63,6 @@ namespace CustomScripts.Managers
 
             if (isHit) {
                 var enemyHit = hit.transform.GetComponent<Enemy>();
-                Debug.Log(enemyHit);
                 this.OnAttackImplemented(enemyHit);
             }
         }

@@ -25,18 +25,23 @@ namespace CustomScripts.Entities.PlayerSystem
             players.Add(this);
             this.Animator = GetComponent<Animator>();
             this.Controller = GetComponent<PlayerController>();
+            this.skill = new NoSkill(this);
 
             UpdateManager.Instance.GlobalUpdate += this.ChooseSkill;
             GameManager.Instance.ImplementAttack += this.ImplementSkill;
         }
 
-        private IPlayerSkill skill = NoSkill.Instance;
+        private IPlayerSkill skill;
         private void ChooseSkill()
         {
             if (Input.GetKeyDown(KeyCode.A))
                 this.skill = new BasicAttack(this);
             else if (Input.GetKeyDown(KeyCode.Q))
                 this.skill = new ShurikenBlast(this);
+            else if (Input.GetMouseButtonDown(1)) {
+                this.skill = new NoSkill(this);
+                this.ImplementSkill(null);
+            }
         }
 
         private void ImplementSkill(Enemy target)

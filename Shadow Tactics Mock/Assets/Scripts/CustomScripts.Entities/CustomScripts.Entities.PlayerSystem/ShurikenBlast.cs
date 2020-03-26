@@ -22,7 +22,7 @@ namespace CustomScripts.Entities.PlayerSystem
         {
             this.target = target;
             this.player.StartCoroutine(Logic());
-            return NoSkill.Instance;
+            return new NoSkill(this.player);
 
 
             IEnumerator Logic()

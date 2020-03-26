@@ -9,17 +9,20 @@ namespace CustomScripts.Entities.PlayerSystem
 {
     public class NoSkill : IPlayerSkill
     {
-        public static NoSkill Instance { get; }
-        static NoSkill()
+        private Player player;
+        public NoSkill(Player player)
         {
-            if (Instance != null)
-                return;
-
-            Instance = new NoSkill();
+            this.player = player;
         }
 
         public int Damage => 0;
-        public IPlayerSkill Implement(Enemy target) => this;
+        public IPlayerSkill Implement(Enemy target)
+        {
+            this.player.Controller.Agent.ResetPath();
+            this.player.StopAllCoroutines();
+            this.player.Controller.UnLock();
+            return this;
+        }
 
     }
 }

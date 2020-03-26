@@ -32,6 +32,11 @@ namespace CustomScripts.Entities.PlayerSystem
 
         private void VisualizeFOV() => this.visual.BuildMesh();
 
+        public void DeVisualizeFOV()
+        {
+            UpdateManager.Instance.GlobalLateUpdate -= this.VisualizeFOV;
+            this.meshFilter.mesh = null;
+        } 
 
         public Vector3 GetDirectionFromAngle(float angleInDeg, bool isGlobalAngle)
         {

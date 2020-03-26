@@ -19,9 +19,15 @@ namespace CustomScripts.Entities.EnemySystem
         public virtual void TakeDamage(IPlayerSkill skill)
         {
             this.health -= skill.Damage;
-
+            
             if (this.health <= 0)
-                Debug.Log($"{name} is dead");
+                Die();
+        }
+
+        public void Die()
+        {
+            Enemies.Remove(this);
+            this.fov.DeVisualizeFOV();
         }
 
         protected NavMeshAgent agent;
