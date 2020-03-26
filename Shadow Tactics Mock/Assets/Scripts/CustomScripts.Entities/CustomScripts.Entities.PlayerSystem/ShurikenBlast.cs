@@ -34,9 +34,9 @@ namespace CustomScripts.Entities.PlayerSystem
                     var startPos = this.ninja.Shuriken.transform.position;
                     var targetPos = target.transform.position;
                     this.ninja.StartCoroutine(ThrowShuriken(startPos, targetPos));
+                    this.ninja.Controller.Agent.ResetPath();
                 }
-                else
-                {
+                else {
                     Chase();
                     this.ninja.StartCoroutine(Logic());
                 }
