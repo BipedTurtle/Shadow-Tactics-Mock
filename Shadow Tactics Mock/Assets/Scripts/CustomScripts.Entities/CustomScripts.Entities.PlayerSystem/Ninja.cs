@@ -1,4 +1,5 @@
-﻿using System;
+﻿using CustomScripts.Entities.EnemySystem;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -14,6 +15,8 @@ namespace CustomScripts.Entities.PlayerSystem
         protected override void Start()
         {
             base.Start();
+
+            base.Inventory.Add(this.Shuriken);
         }
 
         protected override void ChooseSkill()
@@ -27,6 +30,5 @@ namespace CustomScripts.Entities.PlayerSystem
                 base.ImplementSkill(null);
             }
         }
-
     }
 }
