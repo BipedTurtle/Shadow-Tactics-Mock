@@ -9,11 +9,11 @@ namespace CustomScripts.Entities.PlayerSystem
     {
         public int Damage => 100;
 
-        private Player player;
+        private Ninja ninja;
         public ShurikenBlast(Player player)
         {
-            this.player = player;
-            this.player.Shuriken.ShurikenLanded += this.OnShurikenLanded_DealDamage;
+            this.ninja = (player as Ninja) ?? throw new ArgumentException("Only a Ninja can use this skill. It's not for other types, such as Yuki or Samurai");
+            this.ninja.Shuriken.ShurikenLanded += this.OnShurikenLanded_DealDamage;
         }
 
         private Enemy target;
@@ -21,8 +21,8 @@ namespace CustomScripts.Entities.PlayerSystem
         public IPlayerSkill Implement(Enemy target)
         {
             this.target = target;
-            this.player.StartCoroutine(Logic());
-            return new NoSkill(this.player);
+            this.ninja.StartCoroutine(Logic());
+            return new NoSkill(this.ninja);
 
 
             IEnumerator Logic()
@@ -31,31 +31,31 @@ namespace CustomScripts.Entities.PlayerSystem
 
                 var isWithinRange = Chase();
                 if (isWithinRange) {
-                    var startPos = this.player.Shuriken.transform.position;
+                    var startPos = this.ninja.Shuriken.transform.position;
                     var targetPos = target.transform.position;
-                    this.player.StartCoroutine(ThrowShuriken(startPos, targetPos));
+                    this.ninja.StartCoroutine(ThrowShuriken(startPos, targetPos));
                 }
                 else
                 {
                     Chase();
-                    this.player.StartCoroutine(Logic());
+                    this.ninja.StartCoroutine(Logic());
                 }
             }
 
             bool Chase()
             {
-                var sqrDistance = (target.transform.position - this.player.Position).sqrMagnitude;
+                var sqrDistance = (target.transform.position - this.ninja.Position).sqrMagnitude;
                 var isWithinRange = sqrDistance < Mathf.Pow(this.range, 2);
 
                 if (!isWithinRange)
-                    this.player.Controller.Agent.SetDestination(target.transform.position);
+                    this.ninja.Controller.Agent.SetDestination(target.transform.position);
 
                 return isWithinRange;
             }
             
             IEnumerator ThrowShuriken(Vector3 startPos, Vector3 targetPos, float progress=0)
             {
-                Transform shuriken = this.player.Shuriken.transform;
+                Transform shuriken = this.ninja.Shuriken.transform;
 
                 var speed = 3f;
                 float t = progress + speed * Time.fixedDeltaTime;
@@ -63,7 +63,7 @@ namespace CustomScripts.Entities.PlayerSystem
 
                 yield return null;
                 if (t < 1)
-                    this.player.StartCoroutine(ThrowShuriken(startPos, targetPos, t));
+                    this.ninja.StartCoroutine(ThrowShuriken(startPos, targetPos, t));
             }
         }
 

@@ -12,11 +12,11 @@ namespace CustomScripts.Entities.PlayerSystem
 {
     public class BasicAttack : IPlayerSkill
     {
-        private Player player;
+        private Ninja player;
         private NavMeshAgent agent;
         public int Damage { get; } = 100; 
 
-        public BasicAttack(Player player)
+        public BasicAttack(Ninja player)
         {
             this.player = player;
             this.agent = player.Controller.Agent;

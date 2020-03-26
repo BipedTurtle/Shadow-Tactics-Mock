@@ -14,8 +14,6 @@ namespace CustomScripts.Entities.PlayerSystem
             this.mainCamera = Camera.main;
             this.Agent = GetComponent<NavMeshAgent>();
 
-            //we might not need lookat in this game
-            //UpdateManager.Instance.GlobalUpdate += this.LookAtMousePointer;
             UpdateManager.Instance.GlobalUpdate += this.MoveToClickPoint;
         }
 
@@ -39,7 +37,6 @@ namespace CustomScripts.Entities.PlayerSystem
             IEnumerator Implementation()
             {
                 yield return new WaitForSeconds(unlockAfter);
-                //UpdateManager.Instance.GlobalUpdate += this.LookAtMousePointer;
                 UpdateManager.Instance.GlobalUpdate += this.MoveToClickPoint;
             }
         }
