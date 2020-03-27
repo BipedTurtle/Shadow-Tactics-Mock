@@ -24,7 +24,6 @@ namespace CustomScripts.Entities.PlayerSystem
         public IPlayerSkill Implement(Enemy target)
         {
             var hasShuriken = this.shuriken != null;
-            Debug.Log(hasShuriken);
             if (hasShuriken) {
                 this.target = target;
                 this.ninja.StartCoroutine(Logic());
@@ -39,16 +38,47 @@ namespace CustomScripts.Entities.PlayerSystem
 
                 var isWithinRange = Chase();
                 if (isWithinRange) {
-                    this.shuriken.gameObject.SetActive(true);
-                    var startPos = this.ninja.transform.position;
-                    var targetPos = this.target.transform.position;
-                    this.ninja.StartCoroutine(ThrowShuriken(startPos, targetPos));
-                    this.ninja.Controller.Agent.ResetPath();
+                    this.target.Freeze();
+
+                    var lookVector = this.target.Position - this.ninja.Position;
+                    var angleBetween = Vector3.Angle(this.ninja.transform.forward, lookVector);
+                    var threshold = .5f;
+                    var shouldTurnMore = angleBetween > threshold;
+                    if (shouldTurnMore)
+                        this.ninja.StartCoroutine(Turn());
+                    else {
+                        this.shuriken.gameObject.SetActive(true);
+                        var startPos = this.ninja.transform.position;
+                        var targetPos = this.target.transform.position;
+                        this.ninja.StartCoroutine(ThrowShuriken(startPos, targetPos));
+                        this.ninja.Controller.Agent.ResetPath();
+                    }
                 }
                 else {
                     Chase();
                     this.ninja.StartCoroutine(Logic());
                 }
+            }
+
+            IEnumerator Turn(float progress = 0)
+            {
+                this.ninja.Controller.Agent.ResetPath();
+
+                var angularSpeed = 30f;
+                var t = progress + angularSpeed * Time.fixedDeltaTime;
+                var currentRotation = this.ninja.transform.rotation;
+                var lookVector = this.target.Position - this.ninja.Position;
+                var targetRotation = Quaternion.LookRotation(lookVector);
+                this.ninja.transform.rotation = Quaternion.Lerp(currentRotation, targetRotation, t);
+
+                yield return null;
+                var toTargetVector = this.target.Position - this.ninja.Position;
+                var angleBetween = Vector3.Angle(this.ninja.transform.forward, toTargetVector);
+                var threshold = 1f;
+                if (angleBetween < threshold)
+                    this.ninja.StartCoroutine(Logic());
+                else
+                    this.ninja.StartCoroutine(Turn());
             }
 
             bool Chase()
@@ -61,6 +91,8 @@ namespace CustomScripts.Entities.PlayerSystem
 
                 return isWithinRange;
             }
+
+
             
             IEnumerator ThrowShuriken(Vector3 startPos, Vector3 targetPos, float progress=0)
             {

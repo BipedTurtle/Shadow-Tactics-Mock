@@ -83,5 +83,7 @@ namespace CustomScripts.Entities.EnemySystem
         }
 
         protected abstract void Patrol();
+
+        public abstract void Freeze();
     }
 }

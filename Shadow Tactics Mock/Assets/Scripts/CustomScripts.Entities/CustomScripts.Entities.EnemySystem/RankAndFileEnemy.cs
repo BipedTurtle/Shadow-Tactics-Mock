@@ -26,13 +26,16 @@ namespace CustomScripts.Entities.EnemySystem
             Freeze();
             base.TakeDamage(skill);
 
-            void Freeze() {
-                this.agent.isStopped = true;
-                UpdateManager.Instance.GlobalUpdate -= this.Patrol;
-                UpdateManager.Instance.GlobalUpdate -= base.AttackPlayerInView;
-                UpdateManager.Instance.GlobalUpdate -= base.StopAttackingIfOutSideView;
-            }
         }
+
+
+        public override void Freeze() {
+            this.agent.isStopped = true;
+            UpdateManager.Instance.GlobalUpdate -= this.Patrol;
+            UpdateManager.Instance.GlobalUpdate -= base.AttackPlayerInView;
+            UpdateManager.Instance.GlobalUpdate -= base.StopAttackingIfOutSideView;
+        }
+
 
         [SerializeField] private Transform[] rallies;
         private Vector3[] rallyPoints;
