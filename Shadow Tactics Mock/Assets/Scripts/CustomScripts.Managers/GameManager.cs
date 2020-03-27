@@ -1,8 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using UnityEngine;
 using CustomScripts.Entities.EnemySystem;
 using CustomScripts.Entities.PlayerSystem;
@@ -30,17 +26,21 @@ namespace CustomScripts.Managers
 
             //DO NOT CHANGE THE ORDER
             UpdateManager.Instance.GlobalUpdate += this.SignalAttack;
-            UpdateManager.Instance.GlobalUpdate += this.ToggleAttack;
+            UpdateManager.Instance.GlobalUpdate += this.CheckAction;
         }
 
+
+        public event Action CancelSkill;
         private bool isActionReady;
-        private void ToggleAttack()
+        private void CheckAction()
         {
             if (Input.GetKeyDown(KeyCode.A) ||
                 Input.GetKeyDown(KeyCode.Q))
                 this.isActionReady = true;
             else if (Input.GetMouseButtonDown(0))
                 this.isActionReady = false;
+            else if (Input.GetMouseButtonDown(1))
+                this.CancelSkill?.Invoke();
         }
 
         private void SignalAttack()

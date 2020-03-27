@@ -41,6 +41,14 @@ namespace CustomScripts.Entities.PlayerSystem
             this.canBeUsed = false;
         }
 
+        public void InstallAt(Vector3 installSpot)
+        {
+            gameObject.SetActive(true);
+            var verticalOffset = Vector3.up * transform.localScale.y;
+            transform.position = installSpot + verticalOffset;
+            transform.SetParent(null);
+        }
+
         public void OnStored()
         {
             this.canBeUsed = true;

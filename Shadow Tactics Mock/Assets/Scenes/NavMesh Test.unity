@@ -139,6 +139,11 @@ PrefabInstance:
       propertyPath: m_Name
       value: Ninja
       objectReference: {fileID: 0}
+    - target: {fileID: 7023866452785864671, guid: 7f125150e94b01a43a46bd5390398243,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 7023866452785864674, guid: 7f125150e94b01a43a46bd5390398243,
         type: 3}
       propertyPath: m_LocalPosition.x
@@ -503,7 +508,7 @@ GameObject:
   - component: {fileID: 1439134484}
   - component: {fileID: 1439134483}
   - component: {fileID: 1439134482}
-  m_Layer: 0
+  m_Layer: 9
   m_Name: Ground
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -1468,7 +1473,7 @@ PrefabInstance:
     - target: {fileID: 2487951334924477496, guid: 4df7ef1f73f2c5941b5f44cf8852ceb5,
         type: 3}
       propertyPath: m_IsActive
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 4df7ef1f73f2c5941b5f44cf8852ceb5, type: 3}

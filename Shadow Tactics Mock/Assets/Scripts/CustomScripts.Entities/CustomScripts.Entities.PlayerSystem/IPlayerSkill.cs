@@ -11,5 +11,6 @@ namespace CustomScripts.Entities.PlayerSystem
     {
         int Damage { get; }
         IPlayerSkill Implement(Enemy target, ActionType actionType);
+        void Cancel();
     }
 }

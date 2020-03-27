@@ -31,5 +31,19 @@ namespace CustomScripts.Utility
         public Vector3 FromScreenToWorld(Vector3 pos) => this.main.ScreenToWorldPoint(pos);
 
         public Ray FromScreenPointToRay(Vector3 pos) => this.main.ScreenPointToRay(pos);
+
+        public Vector3 GetPointFromCursor(LayerMask mask)
+        {
+            var ray = this.main.ScreenPointToRay(Input.mousePosition);
+            var distance = this.main.transform.position.y * 2;
+            var isHit =
+                Physics.Raycast(
+                    ray: ray,
+                    maxDistance: distance,
+                    layerMask: mask,
+                    hitInfo: out RaycastHit hit);
+
+            return isHit ? hit.point : Vector3.zero;
+        }
     }
 }

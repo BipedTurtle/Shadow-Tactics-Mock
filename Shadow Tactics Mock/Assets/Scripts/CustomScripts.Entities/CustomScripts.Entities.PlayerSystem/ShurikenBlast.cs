@@ -2,6 +2,7 @@
 using System.Collections;
 using CustomScripts.Entities.EnemySystem;
 using UnityEngine;
+using CustomScripts.Managers;
 
 namespace CustomScripts.Entities.PlayerSystem
 {
@@ -17,6 +18,7 @@ namespace CustomScripts.Entities.PlayerSystem
             this.shuriken = this.ninja.Inventory.Get<Shuriken>();
 
             this.ninja.Shuriken.ShurikenLanded += this.OnShurikenLanded_DealDamage;
+            GameManager.Instance.CancelSkill += this.Cancel;
         }
 
         private Enemy target;
@@ -100,6 +102,11 @@ namespace CustomScripts.Entities.PlayerSystem
         private void OnShurikenLanded_DealDamage()
         {
             this.target?.TakeDamage(this);
+        }
+
+        public void Cancel()
+        {
+
         }
     }
 }

@@ -23,6 +23,11 @@ namespace CustomScripts.Entities
             }
         }
 
+        public bool Contains<T>()
+        {
+            return this.storables.OfType<T>().Count() > 0;
+        }
+
         public bool Contains(IStorable storable) => this.storables.Contains(storable);
 
         public void Remove(IStorable storable) => this.storables.Remove(storable);

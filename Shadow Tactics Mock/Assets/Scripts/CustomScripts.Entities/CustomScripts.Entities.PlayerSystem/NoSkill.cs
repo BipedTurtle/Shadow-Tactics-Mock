@@ -24,5 +24,10 @@ namespace CustomScripts.Entities.PlayerSystem
             return this;
         }
 
+
+        public void Cancel()
+        {
+
+        }
     }
 }

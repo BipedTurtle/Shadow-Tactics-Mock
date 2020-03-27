@@ -7,6 +7,7 @@ using System.Threading.Tasks;
 using CustomScripts.Entities.EnemySystem;
 using UnityEngine.AI;
 using UnityEngine;
+using CustomScripts.Managers;
 
 namespace CustomScripts.Entities.PlayerSystem
 {
@@ -20,6 +21,8 @@ namespace CustomScripts.Entities.PlayerSystem
         {
             this.player = player;
             this.agent = player.Controller.Agent;
+
+            GameManager.Instance.CancelSkill += this.Cancel;   
         }
 
         private float attackRange = 1.2f;
@@ -68,6 +71,11 @@ namespace CustomScripts.Entities.PlayerSystem
                 this.player.Controller.UnLock(unlockAfter:1f);
                 this.agent.isStopped = false;
             }
+        }
+
+        public void Cancel()
+        {
+
         }
     }
 }
