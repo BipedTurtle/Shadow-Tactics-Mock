@@ -30,6 +30,7 @@ namespace CustomScripts.Managers
         }
 
 
+        public int previousMouseButtonClicked = 1;
         public event Action CancelSkill;
         private bool isActionReady;
         private void CheckAction()
@@ -37,10 +38,15 @@ namespace CustomScripts.Managers
             if (Input.GetKeyDown(KeyCode.A) ||
                 Input.GetKeyDown(KeyCode.Q))
                 this.isActionReady = true;
-            else if (Input.GetMouseButtonDown(0))
+            else if (Input.GetMouseButtonDown(0)) {
                 this.isActionReady = false;
-            else if (Input.GetMouseButtonDown(1))
-                this.CancelSkill?.Invoke();
+                this.previousMouseButtonClicked = 0;
+            }
+            else if (Input.GetMouseButtonDown(1)) {
+                if (this.previousMouseButtonClicked != 1)                
+                    this.CancelSkill?.Invoke();
+                this.previousMouseButtonClicked = 1;
+            }
         }
 
         private void SignalAttack()

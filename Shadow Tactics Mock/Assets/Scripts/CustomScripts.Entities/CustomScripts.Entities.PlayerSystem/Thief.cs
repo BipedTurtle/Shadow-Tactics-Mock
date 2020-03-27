@@ -26,6 +26,10 @@ namespace CustomScripts.Entities.PlayerSystem
                 base.skill = new BasicAttack(this);
             else if (Input.GetKeyDown(KeyCode.Q))
                 base.skill = new SetTrap(this);
+            else if (Input.GetMouseButtonDown(1)) {
+                base.skill = new NoSkill(this);
+                base.ImplementSkill(null, ActionType.None);
+            }
         }
     }
 }

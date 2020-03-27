@@ -75,7 +75,9 @@ namespace CustomScripts.Entities.PlayerSystem
 
         public void Cancel()
         {
-
+            this.player.StopAllCoroutines();
+            this.player.Controller.Agent.ResetPath();
+            this.player.Controller.UnLock();
         }
     }
 }

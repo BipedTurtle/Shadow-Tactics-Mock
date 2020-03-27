@@ -14,7 +14,7 @@ namespace CustomScripts.Entities.PlayerSystem
         public SetTrap(Thief player)
         {
             this.player = player;
-
+            
             GameManager.Instance.CancelSkill += this.Cancel;
         }
 
