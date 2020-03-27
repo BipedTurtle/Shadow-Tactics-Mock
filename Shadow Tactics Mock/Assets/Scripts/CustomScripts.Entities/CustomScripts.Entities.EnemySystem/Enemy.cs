@@ -18,7 +18,7 @@ namespace CustomScripts.Entities.EnemySystem
 
 
         [SerializeField] private int health = 100;
-        public virtual void TakeDamage(IPlayerSkill skill)
+        public void TakeDamage(IPlayerSkill skill)
         {
             this.health -= skill.Damage;
             
@@ -26,12 +26,16 @@ namespace CustomScripts.Entities.EnemySystem
                 Die();
         }
 
-
-        public void Die()
+        public void TakeDamage(int dmg)
         {
-            Enemies.Remove(this);
-            this.fov.DeVisualizeFOV();
+            this.health -= dmg;
+
+            if (this.health <= 0)
+                Die();
         }
+
+
+        public abstract void Die();
 
 
         protected NavMeshAgent agent;
@@ -43,9 +47,6 @@ namespace CustomScripts.Entities.EnemySystem
             this.agent = GetComponent<NavMeshAgent>();
             this.fov = GetComponentInChildren<FieldOfView>() ?? throw new MissingComponentException("Enemy object" +
                 "requires field of view");
-
-            //why isn't this code being executed?
-            UpdateManager.Instance.GlobalUpdate += this.AttackPlayerInView;
         }
 
         private void OnDestroy()

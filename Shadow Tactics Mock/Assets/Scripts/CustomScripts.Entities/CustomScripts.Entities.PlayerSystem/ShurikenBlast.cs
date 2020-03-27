@@ -13,8 +13,6 @@ namespace CustomScripts.Entities.PlayerSystem
         private Shuriken shuriken;
         public ShurikenBlast(Player player)
         {
-            player.Inventory.Display();
-
             this.ninja = (player as Ninja) ?? throw new ArgumentException("Only a Ninja can use this skill. It's not for other types, such as Yuki or Samurai");
             this.shuriken = this.ninja.Inventory.Get<Shuriken>();
 

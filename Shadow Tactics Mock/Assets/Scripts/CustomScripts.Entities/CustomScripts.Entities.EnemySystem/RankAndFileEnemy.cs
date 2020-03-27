@@ -21,19 +21,19 @@ namespace CustomScripts.Entities.EnemySystem
             UpdateManager.Instance.GlobalUpdate += base.StopAttackingIfOutSideView;
         }
 
-        public override void TakeDamage(IPlayerSkill skill)
-        {
-            Freeze();
-            base.TakeDamage(skill);
-
-        }
-
 
         public override void Freeze() {
             this.agent.isStopped = true;
             UpdateManager.Instance.GlobalUpdate -= this.Patrol;
             UpdateManager.Instance.GlobalUpdate -= base.AttackPlayerInView;
             UpdateManager.Instance.GlobalUpdate -= base.StopAttackingIfOutSideView;
+        }
+
+
+        public override void Die()
+        {
+            this.fov.DeVisualizeFOV();
+            this.Freeze();
         }
 
 
