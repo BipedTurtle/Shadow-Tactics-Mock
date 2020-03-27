@@ -24,15 +24,15 @@ namespace CustomScripts.Entities.PlayerSystem
 
             UpdateManager.Instance.GlobalUpdate += this.ChooseSkill;
             UpdateManager.Instance.GlobalUpdate += this.UponRightMouseButtonClicked;
-            GameManager.Instance.ImplementAttack += this.ImplementSkill;
+            GameManager.Instance.ImplementAction += this.ImplementSkill;
         }
 
         protected IPlayerSkill skill;
         protected abstract void ChooseSkill();
 
-        protected void ImplementSkill(Enemy target)
+        protected void ImplementSkill(Enemy target, ActionType actionType)
         {
-            this.skill.Implement(target);
+            this.skill.Implement(target, actionType);
         }
 
         private void UponRightMouseButtonClicked()

@@ -27,7 +27,7 @@ namespace CustomScripts.Entities.PlayerSystem
                 base.skill = new ShurikenBlast(this);
             else if (Input.GetMouseButtonDown(1)) {
                 base.skill = new NoSkill(this);
-                base.ImplementSkill(null);
+                base.ImplementSkill(null, ActionType.None);
             }
         }
     }

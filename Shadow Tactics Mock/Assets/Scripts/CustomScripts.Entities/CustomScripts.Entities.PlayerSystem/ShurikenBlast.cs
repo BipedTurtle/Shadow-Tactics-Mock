@@ -21,8 +21,12 @@ namespace CustomScripts.Entities.PlayerSystem
 
         private Enemy target;
         private float range = 4f;
-        public IPlayerSkill Implement(Enemy target)
+        public IPlayerSkill Implement(Enemy target, ActionType actionType)
         {
+            var typeMismatch = (actionType != ActionType.Attack);
+            if (typeMismatch)
+                return new NoSkill(this.ninja);
+
             var hasShuriken = this.shuriken != null;
             if (hasShuriken) {
                 this.target = target;

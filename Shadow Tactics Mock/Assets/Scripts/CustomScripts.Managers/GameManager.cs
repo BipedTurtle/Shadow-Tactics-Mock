@@ -5,6 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using UnityEngine;
 using CustomScripts.Entities.EnemySystem;
+using CustomScripts.Entities.PlayerSystem;
 
 namespace CustomScripts.Managers
 {
@@ -32,19 +33,19 @@ namespace CustomScripts.Managers
             UpdateManager.Instance.GlobalUpdate += this.ToggleAttack;
         }
 
-        private bool isAttackReady;
+        private bool isActionReady;
         private void ToggleAttack()
         {
             if (Input.GetKeyDown(KeyCode.A) ||
                 Input.GetKeyDown(KeyCode.Q))
-                this.isAttackReady = true;
+                this.isActionReady = true;
             else if (Input.GetMouseButtonDown(0))
-                this.isAttackReady = false;
+                this.isActionReady = false;
         }
 
         private void SignalAttack()
         {
-            if (!isAttackReady)
+            if (!isActionReady)
                 return;
 
             var shouldHoldAttack = !Input.GetMouseButtonDown(0);
@@ -63,14 +64,26 @@ namespace CustomScripts.Managers
 
             if (isHit) {
                 var enemyHit = hit.transform.GetComponent<Enemy>();
-                this.OnAttackImplemented(enemyHit);
+                this.OnActionImplemented(enemyHit, ActionType.Attack);
             }
+            else
+                this.OnActionImplemented(null, ActionType.Install);
         }
 
-        public event Action<Enemy> ImplementAttack;
-        private void OnAttackImplemented(Enemy enemy)
+        public event Action<Enemy, ActionType> ImplementAction;
+        private void OnActionImplemented(Enemy enemy, ActionType type)
         {
-            this.ImplementAttack?.Invoke(enemy);
+            this.ImplementAction?.Invoke(enemy, type);
         }
+    }
+}
+
+namespace CustomScripts.Entities.PlayerSystem
+{
+    public enum ActionType
+    {
+        None,
+        Attack,
+        Install
     }
 }

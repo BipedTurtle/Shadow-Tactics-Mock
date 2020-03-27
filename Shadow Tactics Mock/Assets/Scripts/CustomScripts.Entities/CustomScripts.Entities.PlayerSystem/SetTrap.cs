@@ -4,25 +4,29 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using CustomScripts.Entities.EnemySystem;
+using UnityEngine;
 
 namespace CustomScripts.Entities.PlayerSystem
 {
-    public class NoSkill : IPlayerSkill
+    public class SetTrap : IPlayerSkill
     {
+        public int Damage => throw new NotImplementedException();
+
         private Player player;
-        public NoSkill(Player player)
+        public SetTrap(Player player)
         {
             this.player = player;
         }
 
-        public int Damage => 0;
         public IPlayerSkill Implement(Enemy target, ActionType actionType)
         {
-            this.player.Controller.Agent.ResetPath();
-            this.player.StopAllCoroutines();
-            this.player.Controller.UnLock();
-            return this;
-        }
+            bool typeMismatch = (actionType != ActionType.Install);
+            if (typeMismatch)
+                return new NoSkill(this.player);
 
+            Debug.Log("set trap");
+
+            return new NoSkill(this.player);
+        }
     }
 }

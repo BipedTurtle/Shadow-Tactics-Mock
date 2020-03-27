@@ -10,6 +10,6 @@ namespace CustomScripts.Entities.PlayerSystem
     public interface IPlayerSkill
     {
         int Damage { get; }
-        IPlayerSkill Implement(Enemy target);
+        IPlayerSkill Implement(Enemy target, ActionType actionType);
     }
 }

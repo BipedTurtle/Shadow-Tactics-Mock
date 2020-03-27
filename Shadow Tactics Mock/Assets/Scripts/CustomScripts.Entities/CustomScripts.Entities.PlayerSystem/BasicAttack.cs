@@ -12,19 +12,23 @@ namespace CustomScripts.Entities.PlayerSystem
 {
     public class BasicAttack : IPlayerSkill
     {
-        private Ninja player;
+        private Player player;
         private NavMeshAgent agent;
         public int Damage { get; } = 100; 
 
-        public BasicAttack(Ninja player)
+        public BasicAttack(Player player)
         {
             this.player = player;
             this.agent = player.Controller.Agent;
         }
 
         private float attackRange = 1.2f;
-        public IPlayerSkill Implement(Enemy target)
+        public IPlayerSkill Implement(Enemy target, ActionType actionType)
         {
+            var typeMismatch = (actionType != ActionType.Attack);
+            if (typeMismatch)
+                return new NoSkill(this.player);
+
             this.player.Controller.Lock();
             this.player.StartCoroutine(Logic());
 
