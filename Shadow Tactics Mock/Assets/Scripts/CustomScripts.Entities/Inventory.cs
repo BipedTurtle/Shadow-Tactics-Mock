@@ -1,8 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using CustomScripts.Entities.EnemySystem;
 using UnityEngine;
 
@@ -10,7 +7,7 @@ namespace CustomScripts.Entities
 {
     public class Inventory
     {
-        private HashSet<IStorable> storables = new HashSet<IStorable>();
+        private List<IStorable> storables = new List<IStorable>();
 
         public void Add(IStorable storable)
         {
@@ -26,6 +23,19 @@ namespace CustomScripts.Entities
             }
         }
 
+        public bool Contains(IStorable storable) => this.storables.Contains(storable);
+
+        public void Remove(IStorable storable) => this.storables.Remove(storable);
+
+        public void Display()
+        {
+            if (this.storables.Count == 0)
+                Debug.Log("Inventory empty");
+
+            foreach (var item in this.storables)
+                Debug.Log(item);
+        }
+
         public T Get<T>()
         {
             var toReturn =
@@ -33,7 +43,6 @@ namespace CustomScripts.Entities
                     .OfType<T>()
                     .FirstOrDefault();
 
-            this.storables.Remove(toReturn as IStorable);
             return toReturn;
         }
 
